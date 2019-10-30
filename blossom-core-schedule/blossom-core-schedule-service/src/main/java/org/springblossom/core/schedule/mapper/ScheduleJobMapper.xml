@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.springblossom.core.schedule.mapper.ScheduleJobMapper">
+
+
+    <update id="updateByBusinessKey">
+        update t_schedule_job set
+            bean_name = #{entity.beanName},
+            params = #{entity.params},
+            cron_expression = #{entity.cronExpression},
+            status = #{entity.status}
+         where business_key = #{entity.businessKey}
+    </update>
+</mapper>
