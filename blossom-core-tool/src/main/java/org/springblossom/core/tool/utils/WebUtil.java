@@ -250,6 +250,9 @@ public class WebUtil extends org.springframework.web.util.WebUtils {
 	 * @throws IOException IOException
 	 */
 	public static String getRequestStr(HttpServletRequest request, byte[] buffer) throws IOException {
+		if(buffer == null) {
+			return StringPool.EMPTY;
+		}
 		String charEncoding = request.getCharacterEncoding();
 		if (charEncoding == null) {
 			charEncoding = StringPool.UTF_8;

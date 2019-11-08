@@ -11,7 +11,7 @@
     <description>
         blossom-tool is a powerful toolbox for SpringBlossom
     </description>
-    <url>https://github.com/chillzhuang/blossom-tool</url>
+    <url>https://github.com/guolf/blossom-tool</url>
     <developers>
         <developer>
             <id>guolf</id>
@@ -30,9 +30,9 @@
         </license>
     </licenses>
     <scm>
-        <connection>https://github.com/chillzhuang/blossom-tool.git</connection>
-        <developerConnection>https://github.com/chillzhuang</developerConnection>
-        <url>https://github.com/chillzhuang/blossom-tool.git</url>
+        <connection>https://github.com/guolf/blossom-tool.git</connection>
+        <developerConnection>https://github.com/guolf</developerConnection>
+        <url>https://github.com/guolf/blossom-tool.git</url>
     </scm>
 
     <properties>
@@ -76,7 +76,7 @@
         <module>blossom-core-push</module>
         <module>blossom-core-test</module>
         <module>blossom-core-oss</module>
-        <!--        <module>blossom-core-wechat</module>-->
+        <module>blossom-core-wechat</module>
     </modules>
 
     <dependencyManagement>

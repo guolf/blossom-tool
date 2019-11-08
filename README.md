@@ -1,13 +1,6 @@
 ## 简介
-blossom-tool 是如梦技术团队作品， 是一个基于 Spring Boot 2 & Spring Cloud Finchley ，封装组合大量组件，用于快速构建中大型API、RESTful API项目的核心包。
+blossom-tool 是一个基于 Spring Boot 2 & Spring Cloud Finchley ，封装组合大量组件，用于快速构建中大型API、RESTful API项目的核心包。
 
-## 鸣谢
-* mica（[Mica](https://github.com/lets-mica/mica)）
-* 如梦技术（[DreamLu](https://www.dreamlu.net/)）
-* pigx（[Pig Microservice](https://www.pig4cloud.com/zh-cn/)）
-* avue（[avue](https://avue.top/)）
-* gitee.ltd（[gitee.ltd](https://gitee.ltd/)）
-* 鲸宵（<a href="https://raw.githubusercontent.com/chillzhuang/blossom-tool/master/pic/jx.png" target="_blank">鲸宵</a>）
 
 ## 工程结构
 ``` 
