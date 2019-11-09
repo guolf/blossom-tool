@@ -71,14 +71,10 @@ public class BaseServiceImpl<M extends BaseMapper<T>, T extends BaseEntity> exte
 	 */
 	private T initSaveEntity(T entity) {
 		BlossomUser user = SecureUtil.getUser();
-		if(ObjectUtil.isEmpty(user)) {
-			user = new BlossomUser();
-			user.setUserId(0);
-		}
 		LocalDateTime now = LocalDateTime.now();
-		entity.setCreateUser(user.getUserId());
+		entity.setCreateUser(user == null ? -1 : user.getUserId());
 		entity.setCreateTime(now);
-		entity.setUpdateUser(user.getUserId());
+		entity.setUpdateUser(user == null ? -1 : user.getUserId());
 		entity.setUpdateTime(now);
 		if(ObjectUtil.isEmpty(entity.getStatus())) {
 			entity.setStatus(BlossomConstant.DB_STATUS_NORMAL);
@@ -89,7 +85,7 @@ public class BaseServiceImpl<M extends BaseMapper<T>, T extends BaseEntity> exte
 
 	private T initUpdateEntity(T entity) {
 		BlossomUser user = SecureUtil.getUser();
-		entity.setUpdateUser(user.getUserId());
+		entity.setUpdateUser(user == null ? -1 : user.getUserId());
 		entity.setUpdateTime(LocalDateTime.now());
 		return entity;
 	}

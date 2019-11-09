@@ -27,4 +27,15 @@ public interface ISecureClient {
 	 */
 	BlossomUser getUserByLoginName(String loginName);
 
+	/**
+	 * 根据登录名获取用户
+	 *
+	 * @param loginName 登录账号
+	 * @param clientId 客户端ID
+	 * @return
+	 */
+	default BlossomUser getUserByLoginName(String loginName, String clientId) {
+		return getUserByLoginName(loginName);
+	};
+
 }

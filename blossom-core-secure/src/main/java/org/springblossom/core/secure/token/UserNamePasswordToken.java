@@ -11,13 +11,20 @@ import org.apache.shiro.authc.AuthenticationToken;
 @Data
 public class UserNamePasswordToken implements AuthenticationToken {
 
+	/**
+	 * 登录账号
+	 */
 	private String loginName;
 
+	/**
+	 * 密码
+	 */
 	private String password;
 
+	/**
+	 * 客户端ID
+	 */
 	private String clientId;
-
-
 
 	@Override
 	public Object getPrincipal() {

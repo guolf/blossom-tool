@@ -45,7 +45,7 @@ public class SecureConfiguration implements WebMvcConfigurer {
 	}
 
 	@Bean
-	@ConditionalOnProperty(prefix = "blossom.secure.two-factor", name = "enable", havingValue = "true")
+	@ConditionalOnProperty(prefix = "blossom.shiro", name = "two-factor", havingValue = "true")
 	@Order(100)
 	public WebMvcConfigurer twoFactorHandlerConfigurer(TwoFactorValidatorManager manager) {
 		return new WebMvcConfigurer() {

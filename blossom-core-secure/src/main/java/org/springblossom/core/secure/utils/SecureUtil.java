@@ -25,12 +25,10 @@ import org.springblossom.core.secure.exception.SecureException;
 import org.springblossom.core.secure.provider.IClientDetails;
 import org.springblossom.core.secure.provider.IClientDetailsService;
 import org.springblossom.core.tool.utils.*;
-import org.springframework.data.redis.core.RedisTemplate;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Base64;
 import java.util.Objects;
-import java.util.Set;
 
 /**
  * Secure工具类
@@ -43,15 +41,6 @@ public class SecureUtil {
 	private static final String BLOSSOM_USER_REQUEST_ATTR = "_BLOSSOM_USER_REQUEST_ATTR_";
 
 	private final static String HEADER = TokenConstant.HEADER;
-	private final static String BEARER = TokenConstant.BEARER;
-	private final static String ACCOUNT = TokenConstant.ACCOUNT;
-	private final static String USER_ID = TokenConstant.USER_ID;
-	private final static String ROLE_ID = TokenConstant.ROLE_ID;
-	private final static String USER_NAME = TokenConstant.USER_NAME;
-	private final static String ROLE_NAME = TokenConstant.ROLE_NAME;
-	private final static String TENANT_CODE = TokenConstant.TENANT_CODE;
-	private final static String CLIENT_ID = TokenConstant.CLIENT_ID;
-	private final static Integer AUTH_LENGTH = TokenConstant.AUTH_LENGTH;
 
 	/**
 	 * 获取用户信息

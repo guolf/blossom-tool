@@ -83,14 +83,12 @@ public class ShiroConfiguration implements WebMvcConfigurer {
 
 	@Bean
 	public SessionManager sessionManager() {
-		SessionManager manager = new SessionManager();
+		SessionManager manager = new SessionManager(shiroSecureProperties);
 		manager.setSessionDAO(new RedisSessionDAO(redisTemplate, shiroSecureProperties));
-
 		Cookie cookie = new SimpleCookie(shiroSecureProperties.getSessionIdCookie());
 		cookie.setHttpOnly(true);
 		// secure设置为true,只能在https下使用
-		// cookie.setSecure(true);
-
+		cookie.setSecure(shiroSecureProperties.isSecure());
 		manager.setSessionIdCookie(cookie);
 		manager.setSessionIdUrlRewritingEnabled(false);
 		return manager;
@@ -132,7 +130,7 @@ public class ShiroConfiguration implements WebMvcConfigurer {
 			filterRuleMap.put(url, "anon");
 		}
 		filterRuleMap.put("/**", "jwt");
-		log.info("ruleMap = {} ", filterRuleMap);
+		log.debug("ruleMap = {} ", filterRuleMap);
 		factoryBean.setFilterChainDefinitionMap(filterRuleMap);
 		return factoryBean;
 	}

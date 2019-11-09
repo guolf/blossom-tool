@@ -1,5 +1,6 @@
 package org.springblossom.core.secure.config;
 
+import lombok.AllArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.session.InvalidSessionException;
 import org.apache.shiro.session.Session;
@@ -21,12 +22,15 @@ import java.io.Serializable;
  * 用于处理仅使用header token时下载文件无法鉴权的问题
  * @author guolf
  */
+@AllArgsConstructor
 public class SessionManager extends DefaultWebSessionManager {
+
+	private ShiroSecureProperties shiroSecureProperties;
 
 	@Override
 	protected Serializable getSessionId(ServletRequest request, ServletResponse response) {
 		// 优先从请求头获取Token
-		String token = WebUtils.toHttp(request).getHeader(TokenConstant.HEADER);
+		String token = WebUtils.toHttp(request).getHeader(shiroSecureProperties.getAuthTokenHeader());
 		// 判断是否有值
 		if (StringUtils.isNoneBlank(token)) {
 			// 设置当前session状态
@@ -42,4 +46,6 @@ public class SessionManager extends DefaultWebSessionManager {
 	protected void onInvalidation(Session session, InvalidSessionException ise, SessionKey key) {
 		super.onInvalidation(session, ise, key);
 	}
+
+
 }

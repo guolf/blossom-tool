@@ -15,6 +15,24 @@ blossom-tool
 	 
 ```
 
+#1 设置新的版本号
+
+mvn versions:set -DnewVersion=3.0-SNAPSHOT
+
+ 
+
+#2 当新版本号设置不正确时可以撤销新版本号的设置
+
+mvn versions:revert
+
+ 
+
+#3 确认新版本号无误后提交新版本号的设置
+
+mvn versions:commit
+
+
+
 
 扩展 `DefaultWebSessionManager`,重写`getSessionId`方法
 

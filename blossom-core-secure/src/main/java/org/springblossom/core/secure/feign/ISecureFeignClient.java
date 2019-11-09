@@ -37,4 +37,16 @@ public interface ISecureFeignClient {
 	@GetMapping(API_PREFIX + "/auth/getUserByLoginName")
 	R<BlossomUser> getUserByLoginName(@RequestParam String loginName);
 
+	/**
+	 * 根据登录名获取用户
+	 *
+	 * @param loginName
+	 * @param clientId
+	 * @return
+	 */
+	@GetMapping(API_PREFIX + "/auth/getUserByLoginNameAndClientId")
+	default R<BlossomUser> getUserByLoginNameAndClientId(@RequestParam String loginName, @RequestParam String clientId) {
+		return getUserByLoginName(loginName);
+	};
+
 }

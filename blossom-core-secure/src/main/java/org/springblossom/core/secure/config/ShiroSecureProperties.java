@@ -27,7 +27,25 @@ public class ShiroSecureProperties {
 	 */
 	private String sessionIdCookie = "x-blossom-token";
 
+	/**
+	 * 是否使用HTTPS
+	 */
+	private boolean secure = false;
+
+	/**
+	 * token 请求头，cookie与token同时存在时，token优先
+	 */
+	private String authTokenHeader = "blossom-auth";
+
+	/**
+	 * 记住我密钥
+	 */
 	private String cipherKey = "";
+
+	/**
+	 * 是否启用双因子认证
+	 */
+	private boolean twoFactor = false;
 
 	/**
 	 * 一天内密码连续错误几次显示验证码（0关闭验证码）

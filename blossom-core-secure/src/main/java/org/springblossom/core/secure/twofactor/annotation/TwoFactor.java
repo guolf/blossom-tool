@@ -28,7 +28,7 @@ public @interface TwoFactor {
 	long timeout() default 10 * 60 * 1000L;
 
 	/**
-	 * 验证器供应商,如: totp,sms,email,由{@link org.springblossom.core.secure.twofactor.TwoFactorValidatorProvider}进行自定义.
+	 * 验证器供应商,如: totp,sms,email,verificationCode,由{@link org.springblossom.core.secure.twofactor.TwoFactorValidatorProvider}进行自定义.
 	 *
 	 * @return provider
 	 * @see org.springblossom.core.secure.twofactor.TwoFactorValidator#getProvider()

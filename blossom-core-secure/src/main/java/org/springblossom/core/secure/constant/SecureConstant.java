@@ -18,7 +18,7 @@ package org.springblossom.core.secure.constant;
 /**
  * 授权校验常量
  *
- * @author Chill
+ * @author guolf
  */
 public interface SecureConstant {
 
@@ -62,8 +62,24 @@ public interface SecureConstant {
 	 */
 	String PWD_ERROR_TIMES_KEY = "PWD_ERROR_TIMES::";
 
+	/**
+	 * 锁定用户前缀
+	 */
 	String LOCK_USER_KEY = "LOCK_USER::";
 
+	/**
+	 * 需要验证码用户前缀
+	 */
 	String VERIFICATION_CODE_USER_KEY = "VERIFICATION_CODE_USER::";
+
+	/**
+	 * 验证码前缀
+	 */
+	String VERIFICATION_KEY = "verification::";
+
+	/**
+	 * 验证码参数，前端传入参数名称
+	 */
+	String VERIFICATION_KEY_PARAM = "verificationKey";
 
 }

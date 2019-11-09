@@ -19,7 +19,7 @@ import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -32,8 +32,11 @@ import java.util.Map;
 @ConfigurationProperties("blossom.secure.url")
 public class BlossomSecureProperties {
 
+	/**
+	 * 免登陆地址
+	 */
 	private final List<String> excludePatterns = new ArrayList<>();
 
-	private final Map filterRuleMap = new HashMap();
+	private final Map filterRuleMap = new LinkedHashMap();
 
 }

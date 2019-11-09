@@ -14,7 +14,6 @@ import org.springblossom.core.secure.BlossomUser;
 import org.springblossom.core.secure.PermissionModel;
 import org.springblossom.core.secure.constant.SecureConstant;
 import org.springblossom.core.secure.feign.ISecureClient;
-import org.springblossom.core.secure.utils.SecureUtil;
 import org.springblossom.core.tool.utils.CollectionUtil;
 import org.springframework.stereotype.Service;
 
@@ -83,7 +82,7 @@ public class TokenRealm extends AuthorizingRealm {
 	@Override
 	protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
 		UserNamePasswordToken userNamePasswordToken = (UserNamePasswordToken) token;
-		BlossomUser user = secureClient.getUserByLoginName(userNamePasswordToken.getLoginName());
+		BlossomUser user = secureClient.getUserByLoginName(userNamePasswordToken.getLoginName(),userNamePasswordToken.getClientId());
 		if (user != null) {
 			return new SimpleAuthenticationInfo(user, userNamePasswordToken.getPassword(), user.getUserName());
 		}
