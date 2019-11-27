@@ -36,7 +36,6 @@ public class ScheduleJobServiceImpl extends BaseServiceImpl<ScheduleJobMapper, S
 	@PostConstruct
 	public void init() {
 		List<ScheduleJobEntity> scheduleJobList = this.list(Wrappers.<ScheduleJobEntity>lambdaQuery()
-			.eq(ScheduleJobEntity::getStatus,ScheduleConstant.ScheduleStatus.NORMAL.getValue())
 			.eq(ScheduleJobEntity::getIsDeleted, BlossomConstant.DB_NOT_DELETED));
 		for (ScheduleJobEntity scheduleJob : scheduleJobList) {
 			CronTrigger cronTrigger = ScheduleUtils.getCronTrigger(scheduler, scheduleJob.getId());
