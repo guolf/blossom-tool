@@ -35,6 +35,7 @@ public class OssConfiguration {
 	}
 
 	@Bean
+	@ConditionalOnMissingBean(com.qiniu.storage.Configuration.class)
 	public com.qiniu.storage.Configuration qiniuConfiguration() {
 		return new com.qiniu.storage.Configuration(Zone.zone0());
 	}
