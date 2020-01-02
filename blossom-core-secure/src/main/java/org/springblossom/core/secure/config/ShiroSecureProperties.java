@@ -43,4 +43,6 @@ public class ShiroSecureProperties {
 	 * 锁定时长，单位分钟（默认一小时）
 	 */
 	private Long lockUserMinute = 60L;
+
+	private String cachePermissionKey = "authorizationCache::";
 }

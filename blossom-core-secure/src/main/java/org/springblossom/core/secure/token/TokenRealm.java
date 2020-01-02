@@ -12,6 +12,7 @@ import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.springblossom.core.secure.BlossomUser;
 import org.springblossom.core.secure.PermissionModel;
+import org.springblossom.core.secure.config.ShiroSecureProperties;
 import org.springblossom.core.secure.constant.SecureConstant;
 import org.springblossom.core.secure.feign.ISecureClient;
 import org.springblossom.core.secure.utils.SecureUtil;
@@ -29,6 +30,8 @@ import org.springframework.stereotype.Service;
 public class TokenRealm extends AuthorizingRealm {
 
 	private ISecureClient secureClient;
+	private ShiroSecureProperties shiroSecureProperties;
+
 
 	@Override
 	public boolean supports(AuthenticationToken token) {
@@ -64,7 +67,7 @@ public class TokenRealm extends AuthorizingRealm {
 	@Override
 	protected Object getAuthorizationCacheKey(PrincipalCollection principals) {
 		BlossomUser user =  (BlossomUser)principals.getPrimaryPrincipal();
-		return SecureConstant.CACHE_USER_PERMISSION + user.getUserId();
+		return shiroSecureProperties.getCachePermissionKey() + user.getUserId();
 	}
 
 	@Override

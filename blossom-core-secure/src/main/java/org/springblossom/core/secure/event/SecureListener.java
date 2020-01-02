@@ -69,7 +69,7 @@ public class SecureListener {
 	@EventListener(PermissionChangeEvent.class)
 	public void permissionChange(PermissionChangeEvent event) {
 		log.info("监听到权限变更,清除权限缓存...");
-		Set<byte[]> keys = redisTemplate.getConnectionFactory().getConnection().keyCommands().keys(("*" + SecureConstant.CACHE_USER_PERMISSION.concat("*")).getBytes());
+		Set<byte[]> keys = redisTemplate.getConnectionFactory().getConnection().keyCommands().keys(("*" + shiroSecureProperties.getCachePermissionKey().concat("*")).getBytes());
 		for (byte[] key : keys) {
 			redisTemplate.getConnectionFactory().getConnection().keyCommands().del(key);
 		}

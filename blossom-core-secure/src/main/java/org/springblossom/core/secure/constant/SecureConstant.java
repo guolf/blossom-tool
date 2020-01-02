@@ -53,11 +53,6 @@ public interface SecureConstant {
 	String DEFAULT_SELECT_STATEMENT = BASE_STATEMENT + " where client_id = ?";
 
 	/**
-	 * 用户权限缓存名称
-	 */
-	String CACHE_USER_PERMISSION = "authorizationCache::";
-
-	/**
 	 * 密码错误次数redis key
 	 */
 	String PWD_ERROR_TIMES_KEY = "PWD_ERROR_TIMES::";
