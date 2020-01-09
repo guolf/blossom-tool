@@ -81,6 +81,6 @@ public class FileController extends BlossomController {
 		if (file.isEmpty()) {
 			return R.fail("文件不能为空");
 		}
-		return R.data(fileService.saveStaticFile(file.getInputStream(), file.getOriginalFilename()));
+		return R.data(fileService.saveFile(file.getInputStream(), file.getOriginalFilename()));
 	}
 }

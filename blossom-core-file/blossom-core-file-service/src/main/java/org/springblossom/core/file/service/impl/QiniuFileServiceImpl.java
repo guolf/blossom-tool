@@ -72,7 +72,7 @@ public class QiniuFileServiceImpl implements FileService {
 	 * @throws IOException
 	 */
 	@Override
-	public BlossomFile saveStaticFile(InputStream fileStream, String fileName) {
+	public BlossomFile saveFile(InputStream fileStream, String fileName) {
 		return qiniuTemplate.putFile(fileName, fileStream);
 	}
 
@@ -107,5 +107,18 @@ public class QiniuFileServiceImpl implements FileService {
 			return Func.toLong(StringUtils.substringBefore(duration, "."));
 		}
 		return 0;
+	}
+
+	/**
+	 * 从其他云存储中迁移文件
+	 *
+	 * @param fileStream
+	 * @param fileName
+	 * @return
+	 * @throws IOException
+	 */
+	@Override
+	public BlossomFile transfer(InputStream fileStream, String fileName) throws IOException {
+		return null;
 	}
 }

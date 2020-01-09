@@ -3,6 +3,7 @@ package org.springblossom.core.file.service;
 import org.springblossom.core.file.entity.FileInfoEntity;
 import org.springblossom.core.file.model.BlossomFile;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -33,7 +34,7 @@ public interface FileService {
 	 * @return 上传文件的访问地址
 	 * @throws IOException
 	 */
-	BlossomFile saveStaticFile(InputStream fileStream, String fileName) throws IOException;
+	BlossomFile saveFile(InputStream fileStream, String fileName) throws IOException;
 
 	/**
 	 * 根据文件名获取文件链接
@@ -50,4 +51,13 @@ public interface FileService {
 	 * @return
 	 */
 	long duration(String fileName);
+
+	/**
+	 * 从其他云存储中迁移文件
+	 * @param fileStream
+	 * @param fileName
+	 * @return
+	 * @throws IOException
+	 */
+	BlossomFile transfer(InputStream fileStream, String fileName) throws IOException;
 }

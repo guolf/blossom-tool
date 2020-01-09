@@ -15,13 +15,11 @@ import org.springblossom.core.tool.utils.Func;
 import org.springblossom.core.tool.utils.StringPool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StreamUtils;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.security.MessageDigest;
 
 /**
@@ -31,6 +29,7 @@ import java.security.MessageDigest;
  */
 @Slf4j
 @Service
+@Primary
 @ConditionalOnProperty(prefix = "blossom.upload.local", name = "enable", havingValue = "true")
 public class LocalFileServiceImpl implements FileService {
 
@@ -145,7 +144,7 @@ public class LocalFileServiceImpl implements FileService {
 	 * @throws IOException
 	 */
 	@Override
-	public BlossomFile saveStaticFile(InputStream fileStream, String fileName) throws IOException {
+	public BlossomFile saveFile(InputStream fileStream, String fileName) throws IOException {
 		BlossomFile blossomFile = new BlossomFile();
 		try {
 			String filePath = uploadRule.fileName(fileName);
@@ -180,7 +179,7 @@ public class LocalFileServiceImpl implements FileService {
 	 */
 	@Override
 	public String fileLink(String fileName) {
-		return uploadProperties.getEndpoint() + fileName;
+		return uploadProperties.getEndpoint().concat(StringPool.SLASH).concat(fileName);
 	}
 
 	/**
@@ -206,5 +205,39 @@ public class LocalFileServiceImpl implements FileService {
 			return null;
 		}
 		return filePath.substring(0, filePath.lastIndexOf(StringPool.SLASH));
+	}
+
+	/**
+	 * 从其他云存储中迁移文件
+	 *
+	 * @param fileStream
+	 * @param fileName
+	 */
+	@Override
+	public BlossomFile transfer(InputStream fileStream, String fileName) throws IOException {
+		BlossomFile blossomFile = new BlossomFile();
+		try {
+			String filePath = fileName;
+			//文件存储绝对路径
+			String absPath = uploadProperties.getBasePath().concat(StringPool.SLASH).concat(getFilePath(filePath));
+			File path = new File(absPath);
+			if (!path.exists()) {
+				//创建目录
+				path.mkdirs();
+			}
+
+			String fileAbsName = uploadProperties.getBasePath() + StringPool.SLASH + filePath;
+			log.debug("fileAbsName = {}", fileAbsName);
+			try (FileOutputStream out = new FileOutputStream(fileAbsName)) {
+				StreamUtils.copy(fileStream, out);
+			}
+
+			//响应上传成功的资源信息
+			blossomFile.setLink(uploadProperties.getEndpoint().concat(StringPool.SLASH).concat(filePath));
+			blossomFile.setName(filePath);
+			return blossomFile;
+		} finally {
+			fileStream.close();
+		}
 	}
 }
