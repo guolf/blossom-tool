@@ -1,10 +1,10 @@
 package org.springblossom.core.file.service;
 
 import org.springblossom.core.file.entity.FileInfoEntity;
+import org.springblossom.core.file.model.BlossomFile;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 
 /**
  * 文件服务,用户保存,读取文件信息
@@ -12,14 +12,6 @@ import java.io.OutputStream;
  * @author guolf
  */
 public interface FileService {
-
-	/**
-	 * 根据文件id或者md5获取文件流,如果文件不存在,将抛出异常
-	 *
-	 * @param fileIdOrMd5 文件id或者md5值
-	 * @return 文件流
-	 */
-	InputStream readFile(String fileIdOrMd5);
 
 	/**
 	 * 保存文件,并返回文件信息,如果存在相同的文件,则不会保存,而是返回已保存的文件
@@ -41,15 +33,21 @@ public interface FileService {
 	 * @return 上传文件的访问地址
 	 * @throws IOException
 	 */
-	String saveStaticFile(InputStream fileStream, String fileName) throws IOException;
+	BlossomFile saveStaticFile(InputStream fileStream, String fileName) throws IOException;
 
 	/**
-	 * 将已上传的文件写出到指定的输出流
+	 * 根据文件名获取文件链接
 	 *
-	 * @param fileId 已上传的文件id
-	 * @param out    要写出的流
-	 * @param skip   跳过写出 {@link InputStream#skip(long)}
-	 * @throws IOException
+	 * @param fileName
+	 * @return
 	 */
-	void writeFile(String fileId, OutputStream out, long skip) throws IOException;
+	String fileLink(String fileName);
+
+	/**
+	 * 视频时长
+	 *
+	 * @param fileName
+	 * @return
+	 */
+	long duration(String fileName);
 }

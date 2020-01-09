@@ -1,22 +1,28 @@
 package org.springblossom.core.file.service.impl;
 
+import it.sauronsoftware.jave.Encoder;
+import it.sauronsoftware.jave.MultimediaInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springblossom.core.file.config.UploadProperties;
 import org.springblossom.core.file.entity.FileInfoEntity;
+import org.springblossom.core.file.model.BlossomFile;
+import org.springblossom.core.file.rule.UploadRule;
 import org.springblossom.core.file.service.FileInfoService;
 import org.springblossom.core.file.service.FileService;
-import org.springblossom.core.log.exception.ServiceException;
-import org.springblossom.core.tool.utils.DateUtil;
+import org.springblossom.core.tool.utils.Func;
 import org.springblossom.core.tool.utils.StringPool;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StreamUtils;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.security.MessageDigest;
-import java.util.Date;
 
 /**
  * 本地文件服务
@@ -25,37 +31,15 @@ import java.util.Date;
  */
 @Slf4j
 @Service
+@ConditionalOnProperty(prefix = "blossom.upload.local", name = "enable", havingValue = "true")
 public class LocalFileServiceImpl implements FileService {
 
 	@Autowired
 	private FileInfoService fileInfoService;
 	@Autowired
 	private UploadProperties uploadProperties;
-
-	/**
-	 * 根据文件id或者md5获取文件流,如果文件不存在,将抛出异常
-	 *
-	 * @param fileIdOrMd5 文件id或者md5值
-	 * @return 文件流
-	 */
-	@Override
-	public InputStream readFile(String fileIdOrMd5) {
-		FileInfoEntity fileInfo = fileInfoService.selectByIdOrMd5(fileIdOrMd5);
-		if (fileInfo == null) {
-			throw new ServiceException("file not found or disabled");
-		}
-		//配置中的文件上传根路径
-		String filePath = uploadProperties.getFilePath() + StringPool.SLASH + fileInfo.getLocation();
-		File file = new File(filePath);
-		if (!file.exists()) {
-			throw new ServiceException("file not found");
-		}
-		try {
-			return new FileInputStream(file);
-		} catch (FileNotFoundException ignore) {
-			throw new ServiceException("file not found");
-		}
-	}
+	@Autowired
+	private UploadRule uploadRule;
 
 	/**
 	 * 保存文件,并返回文件信息,如果存在相同的文件,则不会保存,而是返回已保存的文件
@@ -70,19 +54,18 @@ public class LocalFileServiceImpl implements FileService {
 	@Override
 	public FileInfoEntity saveFile(InputStream fileStream, String fileName, String type) throws IOException {
 		//配置中的文件上传根路径
-		String fileBasePath = uploadProperties.getFilePath();
+		String fileBasePath = uploadProperties.getBasePath();
 		//文件存储的相对路径，以日期分隔，每天创建一个新的目录
-		String filePath = DateUtil.format(new Date(), "yyyyMMdd");
+		String filePath = uploadRule.fileName(fileName);
+
 		//文件存储绝对路径
-		String absPath = fileBasePath.concat(StringPool.SLASH).concat(filePath);
+		String absPath = fileBasePath.concat(StringPool.SLASH).concat(getFilePath(filePath));
 		File path = new File(absPath);
 		if (!path.exists()) {
 			//创建目录
 			path.mkdirs();
 		}
-		//临时文件名 ,纳秒的md5值
-		String newName = String.valueOf(System.nanoTime());
-		String fileAbsName = absPath.concat(StringPool.SLASH).concat(newName);
+		String fileAbsName = absPath.concat(StringPool.SLASH).concat(fileName);
 		int fileSize;
 		MessageDigest digest = DigestUtils.getMd5Digest();
 		try (InputStream proxyStream = new InputStream() {
@@ -130,7 +113,7 @@ public class LocalFileServiceImpl implements FileService {
 		FileInfoEntity fileInfo = fileInfoService.selectByMd5(md5);
 		if (fileInfo != null) {
 			log.info("文件:{}已上传过", fileAbsName);
-			if (new File(uploadProperties.getFilePath() + StringPool.SLASH + fileInfo.getLocation()).exists()) {
+			if (new File(uploadProperties.getBasePath() + StringPool.SLASH + fileInfo.getLocation()).exists()) {
 				//文件已存在则删除临时文件不做处理
 				newFile.delete();
 			} else {
@@ -142,14 +125,13 @@ public class LocalFileServiceImpl implements FileService {
 			newFile.renameTo(new File(absPath.concat(StringPool.SLASH).concat(md5)));
 		}
 		FileInfoEntity infoEntity = new FileInfoEntity();
-		infoEntity.setLocation(filePath.concat(StringPool.SLASH).concat(md5));
+		infoEntity.setLocation(absPath);
 		infoEntity.setName(fileName);
 		infoEntity.setType(type);
 		infoEntity.setSize((long) fileSize);
 		infoEntity.setMd5(md5);
 		fileInfoService.save(infoEntity);
-
-		infoEntity.setUrl(uploadProperties.getDownloadPrefix() + uploadProperties.getDownloadPath() + infoEntity.getId());
+		infoEntity.setUrl(uploadProperties.getEndpoint() + StringPool.SLASH + filePath);
 		fileInfoService.updateById(infoEntity);
 		return infoEntity;
 	}
@@ -163,50 +145,66 @@ public class LocalFileServiceImpl implements FileService {
 	 * @throws IOException
 	 */
 	@Override
-	public String saveStaticFile(InputStream fileStream, String fileName) throws IOException {
+	public BlossomFile saveStaticFile(InputStream fileStream, String fileName) throws IOException {
+		BlossomFile blossomFile = new BlossomFile();
 		try {
-			//文件后缀
-			String suffix = fileName.contains(".") ?
-				fileName.substring(fileName.lastIndexOf(".")) : "";
+			String filePath = uploadRule.fileName(fileName);
+			//文件存储绝对路径
+			String absPath = uploadProperties.getBasePath().concat(StringPool.SLASH).concat(getFilePath(filePath));
+			File path = new File(absPath);
+			if (!path.exists()) {
+				//创建目录
+				path.mkdirs();
+			}
 
-			//以日期划分目录
-			String filePath = DateUtil.format(new Date(), "yyyyMMdd");
-
-			//创建目录
-			new File(uploadProperties.getStaticFilePath() + StringPool.SLASH + filePath).mkdirs();
-
-			// 存储的文件名
-			String realFileName = System.nanoTime() + suffix;
-
-			String fileAbsName = uploadProperties.getStaticFilePath() + StringPool.SLASH + filePath + StringPool.SLASH + realFileName;
-			log.debug("fileAbsName = {}",fileAbsName);
+			String fileAbsName = uploadProperties.getBasePath() + StringPool.SLASH + filePath;
+			log.debug("fileAbsName = {}", fileAbsName);
 			try (FileOutputStream out = new FileOutputStream(fileAbsName)) {
 				StreamUtils.copy(fileStream, out);
 			}
 
 			//响应上传成功的资源信息
-			return uploadProperties.getStaticLocation() + filePath + StringPool.SLASH + realFileName;
+			blossomFile.setLink(uploadProperties.getEndpoint().concat(StringPool.SLASH).concat(filePath));
+			blossomFile.setName(filePath);
+			return blossomFile;
 		} finally {
 			fileStream.close();
 		}
 	}
 
 	/**
-	 * 将已上传的文件写出到指定的输出流
+	 * 根据文件名获取文件链接
 	 *
-	 * @param fileId 已上传的文件id
-	 * @param out    要写出的流
-	 * @param skip   跳过写出 {@link InputStream#skip(long)}
-	 * @throws IOException
+	 * @param fileName
+	 * @return
 	 */
 	@Override
-	public void writeFile(String fileId, OutputStream out, long skip) throws IOException {
-		try (InputStream inputStream = readFile(fileId)) {
-			if (skip > 0) {
-				long len = inputStream.skip(skip);
-				log.info("skip write stream {},{}", skip, len);
-			}
-			StreamUtils.copy(inputStream, out);
+	public String fileLink(String fileName) {
+		return uploadProperties.getEndpoint() + fileName;
+	}
+
+	/**
+	 * 视频时长
+	 *
+	 * @param fileName
+	 * @return
+	 */
+	@Override
+	public long duration(String fileName) {
+		Encoder encoder = new Encoder();
+		try {
+			MultimediaInfo multimediaInfo = encoder.getInfo(new File(uploadProperties.getBasePath() + StringPool.SLASH + fileName));
+			return multimediaInfo.getDuration();
+		} catch (Exception ex) {
+			log.error("获取视频时长出错", ex);
 		}
+		return 0;
+	}
+
+	private String getFilePath(String filePath) {
+		if (Func.isBlank(filePath)) {
+			return null;
+		}
+		return filePath.substring(0, filePath.lastIndexOf(StringPool.SLASH));
 	}
 }

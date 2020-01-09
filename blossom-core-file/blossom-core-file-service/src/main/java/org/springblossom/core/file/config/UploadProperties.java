@@ -9,37 +9,22 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * @author guolf
  */
 @Data
-@ConfigurationProperties(prefix = "blossom.upload")
+@ConfigurationProperties(prefix = "blossom.upload.local")
 public class UploadProperties {
 
 	/**
-	 * 静态文件存储目录,不能以/结尾
+	 * 文件访问地址,上传文件后,将返回此地址+文件相对地址
 	 */
-	private String staticFilePath = "./static/upload";
+	private String endpoint = "http://static.zhdjplus.cn";
 
 	/**
-	 * 静态文件访问地址,上传静态文件后,将返回此地址+文件相对地址,以/结尾
+	 * 本地存储位置
 	 */
-	private String staticLocation = "http://static.zhdjplus.cn/";
+	private String basePath = "./upload";
 
 	/**
-	 * 文件上传目录
+	 * 是否启用本地存储
 	 */
-	private String filePath = "./upload/file";
-
-	/**
-	 * 文件下载地址
-	 */
-	private String downloadPath = "/file/download/";
-
-	/**
-	 * 文件下载前缀
-	 */
-	private String downloadPrefix = "/blossom-system";
-
-	/**
-	 * 存储类型，local本地，qiniu
-	 */
-	private String storage = "local";
+	private Boolean enable = false;
 
 }

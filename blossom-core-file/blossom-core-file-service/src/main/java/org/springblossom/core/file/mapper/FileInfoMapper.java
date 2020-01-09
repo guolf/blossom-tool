@@ -13,6 +13,7 @@ public interface FileInfoMapper extends BaseMapper<FileInfoEntity> {
 
 	/**
 	 * 根据MD5查询
+	 *
 	 * @param md5
 	 * @return
 	 */
@@ -20,6 +21,7 @@ public interface FileInfoMapper extends BaseMapper<FileInfoEntity> {
 
 	/**
 	 * 根据MD5或ID查询
+	 *
 	 * @param idOrMd5
 	 * @return
 	 */

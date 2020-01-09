@@ -73,7 +73,7 @@ public class FileInfoEntity implements Serializable {
 	/**
 	 * 分类
 	 */
-	@ApiModelProperty(value = "分类",notes = "图片：pic、文档：file、视频：video")
+	@ApiModelProperty(value = "分类", notes = "图片：pic、文档：file、视频：video")
 	private String classified;
 
 	/**
