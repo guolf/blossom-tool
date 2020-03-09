@@ -30,6 +30,7 @@ import org.springblossom.core.tool.utils.WebUtil;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindException;
@@ -49,6 +50,7 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 import javax.servlet.Servlet;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
+import java.sql.SQLException;
 import java.util.Set;
 
 /**
@@ -138,6 +140,13 @@ public class BlossomRestExceptionTranslator {
 	public R handleError(HttpMediaTypeNotSupportedException e) {
 		log.error("不支持当前媒体类型:{}", e.getMessage());
 		return R.fail(ResultCode.MEDIA_TYPE_NOT_SUPPORTED, e.getMessage());
+	}
+
+	@ExceptionHandler(DataAccessException.class)
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	public R handleSQLError(DataAccessException e) {
+		log.error("数据库异常", e);
+		return R.fail(ResultCode.INTERNAL_SERVER_ERROR, "服务器异常，请稍后再试");
 	}
 
 	@ExceptionHandler(ServiceException.class)
