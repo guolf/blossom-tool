@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -83,7 +84,9 @@ public class RequestLogAspect {
 		// 处理 参数
 		List<String> needRemoveKeys = new ArrayList<>(paraMap.size());
 		paraMap.forEach((key, value) -> {
-			if (value instanceof HttpServletRequest) {
+			if(value instanceof MultipartHttpServletRequest) {
+				// 忽略
+			} else if (value instanceof HttpServletRequest) {
 				needRemoveKeys.add(key);
 				paraMap.putAll(((HttpServletRequest) value).getParameterMap());
 			} else if (value instanceof HttpServletResponse) {
