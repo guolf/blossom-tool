@@ -3,9 +3,6 @@ package org.springblossom.core.launch.utils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springblossom.core.launch.entity.License;
 import oshi.SystemInfo;
-import oshi.hardware.Baseboard;
-import oshi.hardware.ComputerSystem;
-import oshi.hardware.Firmware;
 import oshi.hardware.HardwareAbstractionLayer;
 
 import java.time.LocalDate;
@@ -32,6 +29,7 @@ public class LicenseGenerator {
 
 	/**
 	 * 生成注册码，私钥加密，公钥解密
+	 *
 	 * @param license
 	 * @throws Exception
 	 */
@@ -75,6 +73,7 @@ public class LicenseGenerator {
 
 	public static void main(String[] args) {
 		try {
+			System.out.printf(getSerialNumber());
 //			generator();
 			verify("5ac0b69286d694295804e93b67b8c92894f405dac0fea175993c4e8dc80a0828143339e8b42c660e67cac05a6272ae9948704d70a728d049687de2d01441227d0d21bc0702a57b1f2d7bed2757d713f05ebda67e819a14bd26e03882b51d5f147bc41a87e02ca89c45080d091271610c945cca22c3646379adc3314d92a15bfa");
 		} catch (Exception ex) {

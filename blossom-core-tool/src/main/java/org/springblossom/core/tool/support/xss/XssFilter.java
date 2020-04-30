@@ -34,10 +34,10 @@ public class XssFilter implements Filter {
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 		ServletRequest requestWrapper = null;
-		if (request instanceof HttpServletRequest) {
+		if (request instanceof HttpServletRequest &&  ((HttpServletRequest) request).getRequestURL().indexOf("feign-client") < 0 ) {
 			requestWrapper = new XssHttpServletRequestWrapper((HttpServletRequest) request);
 		}
-		if (requestWrapper == null) {
+		if (requestWrapper == null ) {
 			chain.doFilter(request, response);
 		} else {
 			chain.doFilter(requestWrapper, response);

@@ -68,7 +68,7 @@ public class MessageConfiguration implements WebMvcConfigurer {
 		FilterRegistrationBean registration = new FilterRegistrationBean();
 		registration.setDispatcherTypes(DispatcherType.REQUEST);
 		registration.setFilter(new XssFilter());
-		registration.addUrlPatterns("/*");
+		registration.addUrlPatterns("/test");
 		registration.setName("xssFilter");
 		registration.setOrder(Ordered.LOWEST_PRECEDENCE);
 		return registration;

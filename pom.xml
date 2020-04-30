@@ -77,6 +77,7 @@
         <module>blossom-core-test</module>
 <!--        <module>blossom-core-oss</module>-->
         <module>blossom-core-wechat</module>
+        <module>blossom-core-ratelimit</module>
     </modules>
 
     <dependencyManagement>

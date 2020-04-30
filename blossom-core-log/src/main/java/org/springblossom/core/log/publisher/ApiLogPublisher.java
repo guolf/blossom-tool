@@ -16,6 +16,7 @@
 
 package org.springblossom.core.log.publisher;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springblossom.core.log.annotation.ApiLog;
 import org.springblossom.core.log.event.ApiLogEvent;
 import org.springblossom.core.log.model.LogApi;
@@ -34,6 +35,7 @@ import java.io.IOException;
  *
  * @author Chill
  */
+@Slf4j
 public class ApiLogPublisher {
 
 	/**
@@ -44,7 +46,7 @@ public class ApiLogPublisher {
 	 * @param apiLog
 	 * @param time
 	 */
-	public static void publishEvent(String methodName, String methodClass, ApiLog apiLog, long time)  {
+	public static void publishEvent(String methodName, String methodClass, ApiLog apiLog, long time) {
 		try {
 			HttpServletRequest request = WebUtil.getRequest();
 			XssHttpServletRequestWrapper requestWrapper = new XssHttpServletRequestWrapper(request);
@@ -58,7 +60,7 @@ public class ApiLogPublisher {
 			logApi.setCreateBy(Func.toStr(SecureUtil.getUserId()));
 			SpringUtil.publishEvent(new ApiLogEvent(logApi, requestWrapper));
 		} catch (IOException ex) {
-			System.out.println("ex = " + ex);
+			log.error("记录日志出错", ex);
 		}
 	}
 }
