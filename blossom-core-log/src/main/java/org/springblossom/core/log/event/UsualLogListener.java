@@ -20,16 +20,15 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springblossom.core.launch.props.BlossomProperties;
 import org.springblossom.core.launch.server.ServerInfo;
+import org.springblossom.core.log.constant.EventConstant;
 import org.springblossom.core.log.feign.ILogClient;
 import org.springblossom.core.log.model.LogUsual;
-import org.springblossom.core.tool.utils.UrlUtil;
-import org.springblossom.core.tool.utils.WebUtil;
+import org.springblossom.core.log.utils.LogAbstractUtil;
 import org.springframework.context.event.EventListener;
 import org.springframework.core.annotation.Order;
 import org.springframework.scheduling.annotation.Async;
 
-import javax.servlet.http.HttpServletRequest;
-import java.time.LocalDateTime;
+import java.util.Map;
 
 /**
  * 异步监听日志事件
@@ -48,19 +47,9 @@ public class UsualLogListener {
 	@Order
 	@EventListener(UsualLogEvent.class)
 	public void saveUsualLog(UsualLogEvent event) {
-		LogUsual logUsual = event.getLogUsual();
-		HttpServletRequest request = event.getRequest();
-		if(request != null) {
-			logUsual.setRequestUri(UrlUtil.getPath(request.getRequestURI()));
-			logUsual.setUserAgent(request.getHeader(WebUtil.USER_AGENT_HEADER));
-			logUsual.setMethod(request.getMethod());
-			logUsual.setParams(WebUtil.getRequestParamString(request));
-		}
-		logUsual.setServerHost(serverInfo.getHostName());
-		logUsual.setServiceId(blossomProperties.getName());
-		logUsual.setEnv(blossomProperties.getEnv());
-		logUsual.setServerIp(serverInfo.getIpWithPort());
-		logUsual.setCreateTime(LocalDateTime.now());
+		Map<String, Object> source = (Map<String, Object>) event.getSource();
+		LogUsual logUsual = (LogUsual) source.get(EventConstant.EVENT_LOG);
+		LogAbstractUtil.addOtherInfoToLog(logUsual, blossomProperties, serverInfo);
 		logService.saveUsualLog(logUsual);
 	}
 

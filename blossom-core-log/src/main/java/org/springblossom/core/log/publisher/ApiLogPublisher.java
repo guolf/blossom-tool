@@ -18,17 +18,17 @@ package org.springblossom.core.log.publisher;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springblossom.core.log.annotation.ApiLog;
+import org.springblossom.core.log.constant.EventConstant;
 import org.springblossom.core.log.event.ApiLogEvent;
 import org.springblossom.core.log.model.LogApi;
-import org.springblossom.core.secure.utils.SecureUtil;
+import org.springblossom.core.log.utils.LogAbstractUtil;
 import org.springblossom.core.tool.constant.BlossomConstant;
-import org.springblossom.core.tool.support.xss.XssHttpServletRequestWrapper;
-import org.springblossom.core.tool.utils.Func;
 import org.springblossom.core.tool.utils.SpringUtil;
 import org.springblossom.core.tool.utils.WebUtil;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * API日志信息事件发送
@@ -47,20 +47,18 @@ public class ApiLogPublisher {
 	 * @param time
 	 */
 	public static void publishEvent(String methodName, String methodClass, ApiLog apiLog, long time) {
-		try {
-			HttpServletRequest request = WebUtil.getRequest();
-			XssHttpServletRequestWrapper requestWrapper = new XssHttpServletRequestWrapper(request);
-			LogApi logApi = new LogApi();
-			logApi.setType(BlossomConstant.LOG_NORMAL_TYPE);
-			logApi.setTitle(apiLog.value());
-			logApi.setTime(String.valueOf(time));
-			logApi.setMethodClass(methodClass);
-			logApi.setSuccess(1);
-			logApi.setMethodName(methodName);
-			logApi.setCreateBy(Func.toStr(SecureUtil.getUserId()));
-			SpringUtil.publishEvent(new ApiLogEvent(logApi, requestWrapper));
-		} catch (IOException ex) {
-			log.error("记录日志出错", ex);
-		}
+		HttpServletRequest request = WebUtil.getRequest();
+
+		LogApi logApi = new LogApi();
+		logApi.setType(BlossomConstant.LOG_NORMAL_TYPE);
+		logApi.setTitle(apiLog.value());
+		logApi.setTime(String.valueOf(time));
+		logApi.setMethodClass(methodClass);
+		logApi.setMethodName(methodName);
+
+		LogAbstractUtil.addRequestInfoToLog(request, logApi);
+		Map<String, Object> event = new HashMap<>(16);
+		event.put(EventConstant.EVENT_LOG, logApi);
+		SpringUtil.publishEvent(new ApiLogEvent(event));
 	}
 }

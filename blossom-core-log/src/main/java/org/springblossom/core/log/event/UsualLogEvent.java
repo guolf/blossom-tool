@@ -16,29 +16,19 @@
 
 package org.springblossom.core.log.event;
 
-import lombok.Getter;
-import lombok.Setter;
-import org.springblossom.core.log.model.LogUsual;
 import org.springframework.context.ApplicationEvent;
 
-import javax.servlet.http.HttpServletRequest;
+import java.util.Map;
 
 /**
  * 系统日志事件
  *
  * @author Chill
  */
-@Getter
-@Setter
 public class UsualLogEvent extends ApplicationEvent {
 
-	private LogUsual logUsual;
-	private HttpServletRequest request;
-
-	public UsualLogEvent(LogUsual logUsual, HttpServletRequest request) {
-		super(logUsual);
-		this.logUsual = logUsual;
-		this.request = request;
+	public UsualLogEvent(Map<String, Object> source) {
+		super(source);
 	}
 
 }
