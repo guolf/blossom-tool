@@ -10,6 +10,7 @@ import org.springblossom.core.file.service.FileService;
 import org.springblossom.core.log.exception.ServiceException;
 import org.springblossom.core.tool.api.R;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -45,6 +46,7 @@ public class FileController extends BlossomController {
 	 */
 	@PostMapping(value = "/upload-multi")
 	@ApiOperation("上传多个文件")
+	@Cacheable
 	public R<List<FileInfoEntity>> upload(@RequestPart("files") MultipartFile[] files) {
 		List fileInfoEntityList = Stream.of(files)
 			.map(this::upload)

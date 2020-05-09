@@ -16,9 +16,9 @@ public class NodeTest {
 		List<ForestNode> list = new ArrayList<>();
 		list.add(new ForestNode(1, 0, "1"));
 		list.add(new ForestNode(2, 0, "2"));
-		list.add(new ForestNode(3, 1, "3"));
-		list.add(new ForestNode(4, 2, "4"));
 		list.add(new ForestNode(5, 3, "5"));
+		list.add(new ForestNode(4, 2, "4"));
+		list.add(new ForestNode(3, 1, "3"));
 		list.add(new ForestNode(6, 4, "6"));
 		list.add(new ForestNode(7, 3, "7"));
 		list.add(new ForestNode(8, 5, "8"));
@@ -26,7 +26,7 @@ public class NodeTest {
 		list.add(new ForestNode(10, 9, "10"));
 		List<ForestNode> tns = ForestNodeMerger.merge(list);
 		tns.forEach(node ->
-			System.out.println(JsonUtil.toJson(node))
+			System.out.println("node = " + JsonUtil.toJson(node))
 		);
 	}
 

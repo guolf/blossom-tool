@@ -20,15 +20,15 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springblossom.core.launch.props.BlossomProperties;
 import org.springblossom.core.launch.server.ServerInfo;
+import org.springblossom.core.log.constant.EventConstant;
 import org.springblossom.core.log.feign.ILogClient;
 import org.springblossom.core.log.model.LogError;
-import org.springblossom.core.tool.utils.WebUtil;
+import org.springblossom.core.log.utils.LogAbstractUtil;
 import org.springframework.context.event.EventListener;
 import org.springframework.core.annotation.Order;
 import org.springframework.scheduling.annotation.Async;
 
-import javax.servlet.http.HttpServletRequest;
-import java.time.LocalDateTime;
+import java.util.Map;
 
 /**
  * 异步监听错误日志事件
@@ -47,16 +47,9 @@ public class ErrorLogListener {
 	@Order
 	@EventListener(ErrorLogEvent.class)
 	public void saveErrorLog(ErrorLogEvent event) {
-		LogError logError = event.getLogError();
-		HttpServletRequest request = event.getRequest();
-		logError.setUserAgent(request.getHeader(WebUtil.USER_AGENT_HEADER));
-		logError.setMethod(request.getMethod());
-		logError.setParams(WebUtil.getRequestParamString(request));
-		logError.setServiceId(blossomProperties.getName());
-		logError.setServerHost(serverInfo.getHostName());
-		logError.setServerIp(serverInfo.getIpWithPort());
-		logError.setEnv(blossomProperties.getEnv());
-		logError.setCreateTime(LocalDateTime.now());
+		Map<String, Object> source = (Map<String, Object>) event.getSource();
+		LogError logError = (LogError) source.get(EventConstant.EVENT_LOG);
+		LogAbstractUtil.addOtherInfoToLog(logError, blossomProperties, serverInfo);
 		logService.saveErrorLog(logError);
 	}
 

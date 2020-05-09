@@ -16,8 +16,10 @@
 
 package org.springblossom.core.log.publisher;
 
+import org.springblossom.core.log.constant.EventConstant;
 import org.springblossom.core.log.event.ErrorLogEvent;
 import org.springblossom.core.log.model.LogError;
+import org.springblossom.core.log.utils.LogAbstractUtil;
 import org.springblossom.core.secure.utils.SecureUtil;
 import org.springblossom.core.tool.utils.Exceptions;
 import org.springblossom.core.tool.utils.Func;
@@ -25,6 +27,8 @@ import org.springblossom.core.tool.utils.SpringUtil;
 import org.springblossom.core.tool.utils.WebUtil;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 异常信息事件发送
@@ -37,7 +41,6 @@ public class ErrorLogPublisher {
 		HttpServletRequest request = WebUtil.getRequest();
 		LogError logError = new LogError();
 		logError.setRequestUri(requestUri);
-		logError.setCreateBy(Func.toStr(SecureUtil.getUserId()));
 		if (Func.isNotEmpty(error)) {
 			logError.setStackTrace(Exceptions.getStackTraceAsString(error));
 			logError.setExceptionName(error.getClass().getName());
@@ -51,7 +54,12 @@ public class ErrorLogPublisher {
 				logError.setLineNumber(element.getLineNumber());
 			}
 		}
-		SpringUtil.publishEvent(new ErrorLogEvent(logError, request));
+		LogAbstractUtil.addRequestInfoToLog(request, logError);
+
+		Map<String, Object> event = new HashMap<>(16);
+		event.put(EventConstant.EVENT_LOG, logError);
+		event.put(EventConstant.EVENT_REQUEST, request);
+		SpringUtil.publishEvent(new ErrorLogEvent(event));
 	}
 
 }

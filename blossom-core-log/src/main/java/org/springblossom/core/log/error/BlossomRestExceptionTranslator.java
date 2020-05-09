@@ -125,7 +125,7 @@ public class BlossomRestExceptionTranslator {
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public R handleError(HttpMessageNotReadableException e) {
 		log.error("消息不能读取:{}", e.getMessage());
-		return R.fail(ResultCode.MSG_NOT_READABLE, e.getMessage());
+		return R.fail(ResultCode.MSG_NOT_READABLE, "数据格式错误");
 	}
 
 	@ExceptionHandler(HttpRequestMethodNotSupportedException.class)

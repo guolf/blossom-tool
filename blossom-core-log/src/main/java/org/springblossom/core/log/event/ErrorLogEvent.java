@@ -16,29 +16,19 @@
 package org.springblossom.core.log.event;
 
 
-import lombok.Getter;
-import lombok.Setter;
-import org.springblossom.core.log.model.LogError;
 import org.springframework.context.ApplicationEvent;
 
-import javax.servlet.http.HttpServletRequest;
+import java.util.Map;
 
 /**
  * 错误日志事件
  *
  * @author Chill
  */
-@Getter
-@Setter
 public class ErrorLogEvent extends ApplicationEvent {
 
-	private LogError logError;
-	private HttpServletRequest request;
-
-	public ErrorLogEvent(LogError logError, HttpServletRequest request) {
-		super(logError);
-		this.logError = logError;
-		this.request = request;
+	public ErrorLogEvent(Map<String, Object> source) {
+		super(source);
 	}
 
 }

@@ -22,4 +22,13 @@ package org.springblossom.core.log.constant;
  */
 public interface EventConstant {
 
+	/**
+	 * log
+	 */
+	String EVENT_LOG = "log";
+	/**
+	 * request
+	 */
+	String EVENT_REQUEST = "request";
+
 }
