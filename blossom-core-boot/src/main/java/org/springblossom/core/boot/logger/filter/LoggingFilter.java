@@ -19,9 +19,19 @@ public class LoggingFilter implements Filter {
 	private static String LOG_MDC_KEY = "userId";
 
 	@Override
+	public void init(FilterConfig filterConfig) throws ServletException {
+
+	}
+
+	@Override
 	public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
 		MDC.put(LOG_MDC_KEY, Func.toStr(SecureUtil.getUserId()));
 		filterChain.doFilter(servletRequest, servletResponse);
 		MDC.remove(LOG_MDC_KEY);
+	}
+
+	@Override
+	public void destroy() {
+
 	}
 }
