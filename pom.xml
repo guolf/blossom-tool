@@ -191,15 +191,15 @@
             <url>http://maven.aliyun.com/nexus/content/groups/public</url>
         </repository>
         <repository>
-            <id>chehai</id>
-            <url>http://182.106.129.192:1111/repository/maven-public/</url>
+            <id>nexus</id>
+            <url>http://106.225.143.210:10123/nexus/content/groups/public/</url>
         </repository>
     </repositories>
 
     <pluginRepositories>
         <pluginRepository>
             <id>aliyun-plugin</id>
-            <url>http://182.106.129.192:1111/repository/maven-public/</url>
+            <url>http://106.225.143.210:10123/nexus/content/groups/public/</url>
             <snapshots>
                 <enabled>false</enabled>
             </snapshots>
@@ -208,12 +208,12 @@
 
     <distributionManagement>
         <snapshotRepository>
-            <id>chehai-snapshots</id>
-            <url>http://182.106.129.192:1111/repository/maven-snapshots/</url>
+            <id>nexus-snapshots</id>
+            <url>http://106.225.143.210:10123/nexus/content/repositories/snapshots/</url>
         </snapshotRepository>
         <repository>
-            <id>chehai-releases</id>
-            <url>http://182.106.129.192:1111/repository/maven-releases/</url>
+            <id>nexus-releases</id>
+            <url>http://106.225.143.210:10123/nexus/content/repositories/releases/</url>
         </repository>
     </distributionManagement>
 

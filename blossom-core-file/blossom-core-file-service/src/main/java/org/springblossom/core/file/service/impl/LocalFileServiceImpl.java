@@ -1,7 +1,5 @@
 package org.springblossom.core.file.service.impl;
 
-import it.sauronsoftware.jave.Encoder;
-import it.sauronsoftware.jave.MultimediaInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -190,13 +188,6 @@ public class LocalFileServiceImpl implements FileService {
 	 */
 	@Override
 	public long duration(String fileName) {
-		Encoder encoder = new Encoder();
-		try {
-			MultimediaInfo multimediaInfo = encoder.getInfo(new File(uploadProperties.getBasePath() + StringPool.SLASH + fileName));
-			return multimediaInfo.getDuration();
-		} catch (Exception ex) {
-			log.error("获取视频时长出错", ex);
-		}
 		return 0;
 	}
 

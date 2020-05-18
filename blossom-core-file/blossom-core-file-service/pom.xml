@@ -33,12 +33,6 @@
             <artifactId>qiniu-java-sdk</artifactId>
             <version>7.2.26</version>
         </dependency>
-        <dependency>
-            <groupId>it.sauronsoftware</groupId>
-            <artifactId>jave</artifactId>
-            <version>1.0.2</version>
-        </dependency>
-
     </dependencies>
 
 </project>
