@@ -37,3 +37,8 @@ blossom-tool
 		// 若header获取不到token则尝试从cookie中获取
 		return super.getSessionId(request, response);
 	}
+
+
+    mvn versions:set -DnewVersion=2.2.4-SNAPSHOT
+
+    mvn versions:commit 
