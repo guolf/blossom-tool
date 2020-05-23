@@ -18,6 +18,8 @@ package org.springblossom.core.secure.utils;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
+import org.apache.shiro.util.ThreadContext;
 import org.springblossom.core.launch.constant.TokenConstant;
 import org.springblossom.core.secure.BlossomUser;
 import org.springblossom.core.secure.constant.SecureConstant;
@@ -82,7 +84,13 @@ public class SecureUtil {
 	 * @return blossomUser
 	 */
 	public static BlossomUser getUser(HttpServletRequest request) {
-		return (BlossomUser) SecurityUtils.getSubject().getPrincipal();
+		if(ThreadContext.getSecurityManager() != null) {
+			Subject subject = SecurityUtils.getSubject();
+			if (subject.isAuthenticated()) {
+				return (BlossomUser) SecurityUtils.getSubject().getPrincipal();
+			}
+		}
+		return null;
 	}
 
 	/**
