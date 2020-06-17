@@ -1073,7 +1073,7 @@ public class Func {
 	 * @param <T>           T 泛型标记
 	 * @return Bean
 	 */
-	public static <T> T parse(byte[] bytes, TypeReference<?> typeReference) {
+	public static <T> T parse(byte[] bytes, TypeReference<T> typeReference) {
 		return JsonUtil.parse(bytes, typeReference);
 	}
 
@@ -1085,7 +1085,7 @@ public class Func {
 	 * @param <T>           T 泛型标记
 	 * @return Bean
 	 */
-	public static <T> T parse(String jsonString, TypeReference<?> typeReference) {
+	public static <T> T parse(String jsonString, TypeReference<T> typeReference) {
 		return JsonUtil.parse(jsonString, typeReference);
 	}
 
@@ -1097,7 +1097,7 @@ public class Func {
 	 * @param <T>           T 泛型标记
 	 * @return Bean
 	 */
-	public static <T> T parse(InputStream in, TypeReference<?> typeReference) {
+	public static <T> T parse(InputStream in, TypeReference<T> typeReference) {
 		return JsonUtil.parse(in, typeReference);
 	}
 

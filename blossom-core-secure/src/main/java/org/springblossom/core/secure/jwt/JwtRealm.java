@@ -62,14 +62,12 @@
 //	protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
 //		Integer userId = ((BlossomUser) principalCollection.getPrimaryPrincipal()).getUserId();
 //		SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
-//		R<PermissionModel> permissionModel = secureClient.loadPermission();
-//		if (permissionModel.isSuccess()) {
-//			if (CollectionUtil.isNotEmpty(permissionModel.getData().getPermissionList())) {
-//				info.addStringPermissions(permissionModel.getData().getPermissionList());
-//			}
-//			if (CollectionUtil.isNotEmpty(permissionModel.getData().getRoleList())) {
-//				info.addRoles(permissionModel.getData().getRoleList());
-//			}
+//		PermissionModel permissionModel = secureClient.loadPermission();
+//		if (CollectionUtil.isNotEmpty(permissionModel.getPermissionList())) {
+//			info.addStringPermissions(permissionModel.getPermissionList());
+//		}
+//		if (CollectionUtil.isNotEmpty(permissionModel.getRoleList())) {
+//			info.addRoles(permissionModel.getRoleList());
 //		}
 //		return info;
 //	}

@@ -39,7 +39,7 @@ import java.util.*;
 /**
  * Jackson工具类
  *
- * @author Chill
+ * @author guolf
  */
 @Slf4j
 public class JsonUtil {
@@ -99,7 +99,7 @@ public class JsonUtil {
 	 * @param <T>           T 泛型标记
 	 * @return Bean
 	 */
-	public static <T> T parse(String content, TypeReference<?> typeReference) {
+	public static <T> T parse(String content, TypeReference<T> typeReference) {
 		try {
 			return getInstance().readValue(content, typeReference);
 		} catch (IOException e) {
@@ -132,7 +132,7 @@ public class JsonUtil {
 	 * @param <T>           T 泛型标记
 	 * @return Bean
 	 */
-	public static <T> T parse(byte[] bytes, TypeReference<?> typeReference) {
+	public static <T> T parse(byte[] bytes, TypeReference<T> typeReference) {
 		try {
 			return getInstance().readValue(bytes, typeReference);
 		} catch (IOException e) {
@@ -164,7 +164,7 @@ public class JsonUtil {
 	 * @param <T>           T 泛型标记
 	 * @return Bean
 	 */
-	public static <T> T parse(InputStream in, TypeReference<?> typeReference) {
+	public static <T> T parse(InputStream in, TypeReference<T> typeReference) {
 		try {
 			return getInstance().readValue(in, typeReference);
 		} catch (IOException e) {
@@ -186,7 +186,7 @@ public class JsonUtil {
 				content = StringPool.LEFT_SQ_BRACKET + content + StringPool.RIGHT_SQ_BRACKET;
 			}
 
-			List<Map<String, Object>> list = getInstance().readValue(content, new TypeReference<List<T>>() {
+			List<Map<String, Object>> list = (List<Map<String, Object>>) getInstance().readValue(content, new TypeReference<List<T>>() {
 			});
 			List<T> result = new ArrayList<>();
 			for (Map<String, Object> map : list) {
@@ -210,7 +210,7 @@ public class JsonUtil {
 
 	public static <T> Map<String, T> toMap(String content, Class<T> valueTypeRef) {
 		try {
-			Map<String, Map<String, Object>> map = getInstance().readValue(content, new TypeReference<Map<String, T>>() {
+			Map<String, Map<String, Object>> map = (Map<String, Map<String, Object>>) getInstance().readValue(content, new TypeReference<Map<String, T>>() {
 			});
 			Map<String, T> result = new HashMap<>(16);
 			for (Map.Entry<String, Map<String, Object>> entry : map.entrySet()) {
