@@ -23,7 +23,7 @@ spring:
     multipart:
       max-file-size: 256MB
       max-request-size: 1024MB
-      location: /data/tmp
+#      location: /data/tmp
   mvc:
     throw-exception-if-no-handler-found: true
   resources:

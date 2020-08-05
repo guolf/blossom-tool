@@ -123,7 +123,7 @@ public class LocalFileServiceImpl implements FileService {
 			newFile.renameTo(new File(absPath.concat(StringPool.SLASH).concat(md5)));
 		}
 		FileInfoEntity infoEntity = new FileInfoEntity();
-		infoEntity.setLocation(absPath);
+		infoEntity.setLocation(getFilePath(filePath));
 		infoEntity.setName(fileName);
 		infoEntity.setType(type);
 		infoEntity.setSize((long) fileSize);
