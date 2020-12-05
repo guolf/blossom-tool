@@ -92,4 +92,12 @@ public interface BlossomConstant {
 	 */
 	String DEFAULT_UNAUTHORIZED_MESSAGE = "签名认证失败";
 
+	/**
+	 * 日志链路追踪id信息头
+	 */
+	String TRACE_ID_HEADER = "x-traceId-header";
+	/**
+	 * 日志链路追踪id日志标志
+	 */
+	String LOG_TRACE_ID = "traceId";
 }
