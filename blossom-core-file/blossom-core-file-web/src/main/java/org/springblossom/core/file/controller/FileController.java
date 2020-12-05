@@ -2,24 +2,31 @@ package org.springblossom.core.file.controller;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springblossom.core.boot.ctrl.BlossomController;
 import org.springblossom.core.file.entity.FileInfoEntity;
 import org.springblossom.core.file.model.BlossomFile;
+import org.springblossom.core.file.service.FileInfoService;
 import org.springblossom.core.file.service.FileService;
 import org.springblossom.core.log.exception.ServiceException;
 import org.springblossom.core.tool.api.R;
+import org.springblossom.core.tool.utils.Func;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.activation.MimetypesFileTypeMap;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.URLEncoder;
 import java.util.List;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -36,6 +43,10 @@ public class FileController extends BlossomController {
 
 	@Autowired
 	private FileService fileService;
+	@Autowired
+	private FileInfoService fileInfoService;
+
+	private static final Pattern fileNameKeyWordPattern = Pattern.compile("(\\\\)|(/)|(:)(|)|(\\?)|(>)|(<)|(\")");
 
 	/**
 	 * 上传文件,支持多文件上传.获取到文件流后,调用{@link org.springblossom.core.file.service.FileService#saveFile(InputStream, String, String)}进行文件保存
@@ -84,5 +95,42 @@ public class FileController extends BlossomController {
 			return R.fail("文件不能为空");
 		}
 		return R.data(fileService.saveFile(file.getInputStream(), file.getOriginalFilename()));
+	}
+
+	@RequestMapping(value = {"/download/{id}/{name:.+}"}, method = {RequestMethod.GET})
+	@ApiOperation("指定文件名下载文件")
+	public void restDownLoad(@ApiParam("文件的ID或MD5") @PathVariable("id") String id, @ApiParam("文件名") @PathVariable("name") String name, @ApiParam(hidden = true) HttpServletResponse response, @ApiParam(hidden = true) HttpServletRequest request) throws IOException {
+		downLoad(id, name, response, request);
+	}
+
+	@GetMapping({"/download/{id}"})
+	@ApiOperation("下载文件")
+		public void downLoad(@ApiParam("文件的ID或MD5") @PathVariable("id") String idOrMd5, @ApiParam(value = "文件名，如果未指定，默认未上传时的文件名", required = false) @RequestParam(value = "name", required = false) String name, @ApiParam(hidden = true) HttpServletResponse response, @ApiParam(hidden = true) HttpServletRequest request) throws IOException {
+		FileInfoEntity fileInfo = fileInfoService.selectByIdOrMd5(idOrMd5);
+		if (fileInfo == null)
+			throw new ServiceException("文件不存在");
+				String fileName = fileInfo.getName();
+		String suffix = fileName.contains(".") ? fileName.substring(fileName.lastIndexOf("."), fileName.length()) : "";
+		String contentType = (fileInfo.getType() == null) ? MimetypesFileTypeMap.getDefaultFileTypeMap().getContentType(fileName) : fileInfo.getType();
+		if (StringUtils.isBlank(name))
+			name = fileInfo.getName();
+		if (!name.contains("."))
+			name = name.concat(".").concat(suffix);
+		name = fileNameKeyWordPattern.matcher(name).replaceAll("");
+		int skip = 0;
+		long fSize = fileInfo.getSize().longValue();
+		try {
+			String range = request.getHeader("Range").replace("bytes=", "").replace("-", "");
+			skip = Func.toInt(range);
+		} catch (Exception exception) {}
+		response.setContentLength((int)fSize);
+		response.setContentType(contentType);
+		response.setHeader("Content-disposition", "attachment;filename=" + URLEncoder.encode(name, "utf-8"));
+		if (skip > 0) {
+			response.setStatus(206);
+			String contentRange = "bytes " + skip + "-" + (fSize - 1L) + "/" + fSize;
+			response.setHeader("Content-Range", contentRange);
+		}
+		this.fileService.writeFile(idOrMd5, (OutputStream)response.getOutputStream(), skip);
 	}
 }

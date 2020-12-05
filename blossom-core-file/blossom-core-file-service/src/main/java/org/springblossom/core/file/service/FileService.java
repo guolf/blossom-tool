@@ -6,6 +6,7 @@ import org.springblossom.core.file.model.BlossomFile;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 
 /**
  * 文件服务,用户保存,读取文件信息
@@ -60,4 +61,13 @@ public interface FileService {
 	 * @throws IOException
 	 */
 	BlossomFile transfer(InputStream fileStream, String fileName) throws IOException;
+
+	/**
+	 * 下载文件，支持断点续传
+	 * @param idOrMd5
+	 * @param paramOutputStream
+	 * @param skip
+	 * @throws IOException
+	 */
+	void writeFile(String idOrMd5, OutputStream paramOutputStream, long skip) throws IOException;
 }

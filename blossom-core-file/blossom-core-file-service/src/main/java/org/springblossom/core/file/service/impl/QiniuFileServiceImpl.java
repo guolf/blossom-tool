@@ -18,6 +18,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -120,5 +121,18 @@ public class QiniuFileServiceImpl implements FileService {
 	@Override
 	public BlossomFile transfer(InputStream fileStream, String fileName) throws IOException {
 		return null;
+	}
+
+	/**
+	 * 下载文件，支持断点续传
+	 *
+	 * @param idOrMd5
+	 * @param paramOutputStream
+	 * @param skip
+	 * @throws IOException
+	 */
+	@Override
+	public void writeFile(String idOrMd5, OutputStream paramOutputStream, long skip) throws IOException {
+
 	}
 }
