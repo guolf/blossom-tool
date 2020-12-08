@@ -31,6 +31,7 @@
             <groupId>org.springblossom</groupId>
             <artifactId>blossom-core-cloud</artifactId>
             <version>${blossom.tool.version}</version>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>

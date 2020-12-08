@@ -1,36 +1,16 @@
-/**
- * Copyright (c) 2018-2028, Chill Zhuang 庄骞 (smallchill@163.com).
- * <p>
- * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE 3.0;
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * <p>
- * http://www.gnu.org/licenses/lgpl.html
- * <p>
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package org.springblossom.core.boot.ctrl;
 
 import org.springblossom.core.secure.BlossomUser;
 import org.springblossom.core.secure.utils.SecureUtil;
 import org.springblossom.core.tool.api.R;
-import org.springblossom.core.tool.utils.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.Assert;
 
 import javax.servlet.http.HttpServletRequest;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.Date;
 
 /**
  * Blossom控制器封装类
  *
- * @author Chill
+ * @author guolf
  */
 public class BlossomController {
 
@@ -126,27 +106,4 @@ public class BlossomController {
 	public R status(boolean flag) {
 		return R.status(flag);
 	}
-
-	/**
-	 * 时间范围查询
-	 *
-	 * @param param
-	 * @return
-	 */
-	public LocalDateTime[] getSearchDateTime(String param) {
-		Assert.notNull(param, "参数不能为空");
-		String[] dateStrArray = getRequest().getParameterMap().get(param);
-		if (null == dateStrArray || dateStrArray.length != 2) {
-			return null;
-		}
-		LocalDateTime[] localDateTimes = new LocalDateTime[2];
-		for (int i = 0; i < dateStrArray.length; i++) {
-			Date date = DateUtil.parse(dateStrArray[i], "yyyy-MM-dd HH:mm:ss");
-			localDateTimes[i] = LocalDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault());
-		}
-		return localDateTimes;
-
-	}
-
-
 }

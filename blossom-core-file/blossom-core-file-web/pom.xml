@@ -23,6 +23,16 @@
             <artifactId>blossom-core-file-service</artifactId>
             <version>${blossom.tool.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>javax.activation</groupId>
+            <artifactId>activation</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>javax.activation</groupId>
+            <artifactId>javax.activation-api</artifactId>
+        </dependency>
+
     </dependencies>
 
 </project>

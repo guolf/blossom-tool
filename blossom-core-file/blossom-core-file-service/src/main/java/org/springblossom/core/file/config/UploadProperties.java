@@ -20,7 +20,7 @@ public class UploadProperties {
 	/**
 	 * 本地存储位置
 	 */
-	private String basePath = "./upload";
+		private String basePath = "./upload";
 
 	/**
 	 * 是否启用本地存储
