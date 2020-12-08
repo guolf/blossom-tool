@@ -1,6 +1,7 @@
 package org.springblossom.core.boot.filter;
 
 import org.slf4j.MDC;
+import org.springblossom.core.secure.utils.SecureUtil;
 import org.springblossom.core.tool.constant.BlossomConstant;
 import org.springblossom.core.tool.utils.Func;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -37,6 +38,7 @@ public class TraceFilter extends OncePerRequestFilter {
 				traceId = UUID.randomUUID().toString();
 			}
 			MDC.put(BlossomConstant.LOG_TRACE_ID, traceId);
+			MDC.put("userId",Func.toStr(SecureUtil.getUserId()));
 
 			filterChain.doFilter(request, response);
 		} finally {

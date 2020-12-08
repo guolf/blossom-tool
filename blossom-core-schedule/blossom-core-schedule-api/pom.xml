@@ -17,6 +17,10 @@
             <artifactId>blossom-core-mybatis</artifactId>
             <version>${blossom.tool.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-openfeign-core</artifactId>
+        </dependency>
     </dependencies>
 
 </project>
