@@ -29,12 +29,6 @@ public class QiniuConfiguration {
 	private QiniuProperties qiniuProperties;
 
 	@Bean
-	@ConditionalOnMissingBean(UploadRule.class)
-	public UploadRule ossRule() {
-		return new BlossomOssRule();
-	}
-
-	@Bean
 	@ConditionalOnMissingBean(com.qiniu.storage.Configuration.class)
 	public com.qiniu.storage.Configuration qiniuConfiguration() {
 		return new com.qiniu.storage.Configuration(Zone.zone0());
