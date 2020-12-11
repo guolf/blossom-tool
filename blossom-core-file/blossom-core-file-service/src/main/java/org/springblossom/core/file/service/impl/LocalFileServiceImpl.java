@@ -9,7 +9,6 @@ import org.springblossom.core.file.model.BlossomFile;
 import org.springblossom.core.file.rule.UploadRule;
 import org.springblossom.core.file.service.FileInfoService;
 import org.springblossom.core.file.service.FileService;
-import org.springblossom.core.log.exception.ServiceException;
 import org.springblossom.core.tool.utils.Func;
 import org.springblossom.core.tool.utils.StringPool;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -255,17 +254,17 @@ public class LocalFileServiceImpl implements FileService {
 	private InputStream readFile(String fileIdOrMd5) {
 		FileInfoEntity fileInfo = this.fileInfoService.selectByIdOrMd5(fileIdOrMd5);
 		if (fileInfo == null) {
-			throw new ServiceException("file not found or disabled");
+			throw new org.springblossom.core.file.exception.FileNotFoundException("file not found or disabled");
 		}
 		String filePath = uploadProperties.getBasePath() + "/" + fileInfo.getLocation();
 		File file = new File(filePath);
 		if (!file.exists()) {
-			throw new ServiceException("file not found");
+			throw new org.springblossom.core.file.exception.FileNotFoundException("file not found");
 		}
 		try {
 			return new FileInputStream(file);
 		} catch (FileNotFoundException ignore) {
-			throw new ServiceException("file not found");
+			throw new org.springblossom.core.file.exception.FileNotFoundException("file not found");
 		}
 	}
 }

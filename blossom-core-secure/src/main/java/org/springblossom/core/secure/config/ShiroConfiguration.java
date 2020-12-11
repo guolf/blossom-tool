@@ -39,7 +39,7 @@ import java.util.Map;
  *
  * @author guolf
  */
-@Order
+@Order(1000)
 @Slf4j
 @Configuration
 @AllArgsConstructor

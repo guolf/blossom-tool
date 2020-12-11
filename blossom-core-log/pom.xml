@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>blossom-tool</artifactId>
@@ -12,30 +12,31 @@
 
     <artifactId>blossom-core-log</artifactId>
     <name>${project.artifactId}</name>
-    <packaging>jar</packaging>
+    <modules>
+        <module>blossom-core-log-starter</module>
+        <module>blossom-core-log-mysql</module>
+        <module>blossom-core-log-common</module>
+    </modules>
+    <packaging>pom</packaging>
 
     <dependencies>
         <!--blossom-->
         <dependency>
             <groupId>org.springblossom</groupId>
             <artifactId>blossom-core-tool</artifactId>
-            <version>${blossom.tool.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springblossom</groupId>
             <artifactId>blossom-core-secure</artifactId>
-            <version>${blossom.tool.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springblossom</groupId>
             <artifactId>blossom-core-cloud</artifactId>
-            <version>${blossom.tool.version}</version>
         </dependency>
         <!--Mybatis-->
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus</artifactId>
-            <version>${mybatis.plus.version}</version>
         </dependency>
 
         <dependency>
