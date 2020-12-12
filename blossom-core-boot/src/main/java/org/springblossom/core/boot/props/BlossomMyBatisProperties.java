@@ -16,7 +16,7 @@ public class BlossomMyBatisProperties {
 	 * 节点ID 0-1024
 	 * 单机配置多实例，高并发下IdWorker会有重复现象，通过配置节点ID避免
 	 */
-	private Integer nodeId;
+	private Integer nodeId = 0;
 
 	/**
 	 * 是否启用 性能分析拦截器，用于输出每条 SQL 语句及其执行时间
