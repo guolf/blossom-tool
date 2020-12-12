@@ -3,12 +3,10 @@ package org.springblossom.core.log.config;
 import lombok.AllArgsConstructor;
 import org.springblossom.core.launch.props.BlossomProperties;
 import org.springblossom.core.launch.server.ServerInfo;
-import org.springblossom.core.log.aspect.ApiLogAspect;
 import org.springblossom.core.log.event.ApiLogListener;
 import org.springblossom.core.log.event.ErrorLogListener;
 import org.springblossom.core.log.event.UsualLogListener;
 import org.springblossom.core.log.feign.ILogCoreService;
-import org.springblossom.core.log.logger.BlossomLogger;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.context.annotation.Bean;
@@ -27,18 +25,6 @@ public class BlossomLogToolAutoConfiguration {
 	private final ILogCoreService logService;
 	private final ServerInfo serverInfo;
 	private final BlossomProperties blossomProperties;
-
-	@Bean
-	@ConditionalOnMissingBean
-	public ApiLogAspect apiLogAspect() {
-		return new ApiLogAspect();
-	}
-
-	@Bean
-	@ConditionalOnMissingBean
-	public BlossomLogger blossomLogger() {
-		return new BlossomLogger();
-	}
 
 	@Bean
 	@ConditionalOnMissingBean(name = "apiLogListener")

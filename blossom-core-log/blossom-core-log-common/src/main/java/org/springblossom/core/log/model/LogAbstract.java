@@ -87,4 +87,9 @@ public class LogAbstract implements Serializable {
 	@JsonFormat(pattern = DateUtil.PATTERN_DATETIME)
 	protected Date createTime;
 
+	/**
+	 * 日志追踪Id
+	 */
+	protected String traceId;
+
 }

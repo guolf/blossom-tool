@@ -1,6 +1,7 @@
 package org.springblossom.core.log.publisher;
 
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.MDC;
 import org.springblossom.core.log.annotation.ApiLog;
 import org.springblossom.core.log.constant.EventConstant;
 import org.springblossom.core.log.event.ApiLogEvent;
@@ -39,6 +40,7 @@ public class ApiLogPublisher {
 		logApi.setTime(String.valueOf(time));
 		logApi.setMethodClass(methodClass);
 		logApi.setMethodName(methodName);
+		logApi.setTraceId(MDC.get(BlossomConstant.LOG_TRACE_ID));
 
 		LogAbstractUtil.addRequestInfoToLog(request, logApi);
 		Map<String, Object> event = new HashMap<>(16);

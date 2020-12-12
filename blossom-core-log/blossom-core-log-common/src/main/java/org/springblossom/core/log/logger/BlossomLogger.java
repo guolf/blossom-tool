@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springblossom.core.log.publisher.UsualLogPublisher;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 /**
  * 日志工具类
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Value;
  * @author Chill
  */
 @Slf4j
+@Component
 public class BlossomLogger implements InitializingBean {
 
 	@Value("${spring.application.name}")
