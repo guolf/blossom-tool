@@ -53,7 +53,7 @@
         </dependency>
         <dependency>
             <groupId>org.springblossom</groupId>
-            <artifactId>blossom-core-log</artifactId>
+            <artifactId>blossom-core-log-starter</artifactId>
             <version>${blossom.tool.version}</version>
         </dependency>
         <dependency>

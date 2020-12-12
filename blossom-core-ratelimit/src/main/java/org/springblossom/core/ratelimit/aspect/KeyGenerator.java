@@ -17,7 +17,7 @@ public interface KeyGenerator {
 	 * @param params the method parameters (with any var-args expanded)
 	 * @return a generated key
 	 */
-	default Object generate(Object target, Method method, Object... params) {
+	default String  generate(Object target, Method method, Object... params) {
 		String key = method.getDeclaringClass().getName() + StringPool.DOT + method.getName();
 		return key;
 	}

@@ -8,7 +8,9 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springblossom.core.ratelimit.annotation.RateLimiter;
+import org.springblossom.core.tool.el.AspectSupportUtils;
 import org.springblossom.core.tool.utils.Func;
+import org.springblossom.core.tool.utils.SpringUtil;
 import org.springblossom.core.tool.utils.StringPool;
 import org.springblossom.core.tool.utils.WebUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,13 +51,18 @@ public class RateLimiterAspect {
 		// 通过 AnnotationUtils.findAnnotation 获取 RateLimiter 注解
 		RateLimiter rateLimiter = AnnotationUtils.findAnnotation(method, RateLimiter.class);
 		if (rateLimiter != null) {
-			String key = rateLimiter.key();
-			// 默认用类名+方法名做限流的 key 前缀
-			if (Func.isBlank(key)) {
+			String key = "";
+			// 如果key生成器非空，优先使用KeyGenerator
+			if (Func.isNotBlank(rateLimiter.keyGenerator())) {
+				KeyGenerator generator = SpringUtil.getBean(rateLimiter.keyGenerator(), KeyGenerator.class);
+				key = generator.generate(null, method, point.getArgs());
+			} else if (Func.isNotBlank(rateLimiter.key())) {
+				key = AspectSupportUtils.getKeyValue(point, rateLimiter.key());
+			} else {
 				key = method.getDeclaringClass().getName() + StringPool.DOT + method.getName();
+				// 默认 key 为 方法名 + IP地址
+				key = key + SEPARATOR + WebUtil.getIP();
 			}
-			// 最终限流的 key 为 前缀 + IP地址
-			key = key + SEPARATOR + WebUtil.getIP();
 
 			long max = rateLimiter.max();
 			long timeout = rateLimiter.timeout();

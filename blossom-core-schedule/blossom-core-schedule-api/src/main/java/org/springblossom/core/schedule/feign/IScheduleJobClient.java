@@ -1,7 +1,5 @@
 package org.springblossom.core.schedule.feign;
 
-import feign.form.ContentType;
-import org.springblossom.core.launch.constant.AppConstant;
 import org.springblossom.core.schedule.entity.ScheduleJobEntity;
 import org.springblossom.core.tool.api.R;
 import org.springframework.cloud.openfeign.FeignClient;

@@ -19,11 +19,6 @@
         </dependency>
         <dependency>
             <groupId>org.springblossom</groupId>
-            <artifactId>blossom-core-log</artifactId>
-            <version>${blossom.tool.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springblossom</groupId>
             <artifactId>blossom-core-tool</artifactId>
             <version>${blossom.tool.version}</version>
         </dependency>

@@ -4,11 +4,12 @@ import java.lang.reflect.Method;
 
 /**
  * 限流key 默认生成
+ * @author guolf
  */
 public class SimpleKeyGenerator implements KeyGenerator {
 
 	@Override
-	public Object generate(Object target, Method method, Object... params) {
+	public String generate(Object target, Method method, Object... params) {
 		return null;
 	}
 }

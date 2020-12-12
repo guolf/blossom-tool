@@ -110,6 +110,27 @@
                 <artifactId>transmittable-thread-local</artifactId>
                 <version>${transmittable.version}</version>
             </dependency>
+            <!--Mybatis-->
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus</artifactId>
+                <version>${mybatis.plus.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springblossom</groupId>
+                <artifactId>blossom-core-cloud</artifactId>
+                <version>${blossom.tool.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springblossom</groupId>
+                <artifactId>blossom-core-tool</artifactId>
+                <version>${blossom.tool.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springblossom</groupId>
+                <artifactId>blossom-core-secure</artifactId>
+                <version>${blossom.tool.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
