@@ -1,9 +1,11 @@
 package org.springblossom.core.log.publisher;
 
+import org.slf4j.MDC;
 import org.springblossom.core.log.constant.EventConstant;
 import org.springblossom.core.log.event.UsualLogEvent;
 import org.springblossom.core.log.model.LogUsual;
 import org.springblossom.core.log.utils.LogAbstractUtil;
+import org.springblossom.core.tool.constant.BlossomConstant;
 import org.springblossom.core.tool.utils.SpringUtil;
 import org.springblossom.core.tool.utils.WebUtil;
 
@@ -24,6 +26,7 @@ public class UsualLogPublisher {
 		logUsual.setLogLevel(level);
 		logUsual.setLogId(id);
 		logUsual.setLogData(data);
+		logUsual.setTraceId(MDC.get(BlossomConstant.LOG_TRACE_ID));
 
 		LogAbstractUtil.addRequestInfoToLog(request, logUsual);
 		Map<String, Object> event = new HashMap<>(16);

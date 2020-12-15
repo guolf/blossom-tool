@@ -16,6 +16,7 @@
         <module>blossom-core-log-starter</module>
         <module>blossom-core-log-mysql</module>
         <module>blossom-core-log-common</module>
+        <module>blossom-core-log-cloud</module>
     </modules>
     <packaging>pom</packaging>
 

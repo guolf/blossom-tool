@@ -6,6 +6,7 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.springblossom.core.log.annotation.ApiLog;
 import org.springblossom.core.log.publisher.ApiLogPublisher;
+import org.springframework.stereotype.Component;
 
 /**
  * 操作日志使用spring event异步入库
@@ -14,6 +15,7 @@ import org.springblossom.core.log.publisher.ApiLogPublisher;
  */
 @Slf4j
 @Aspect
+@Component
 public class ApiLogAspect {
 
 	@Around("@annotation(apiLog)")

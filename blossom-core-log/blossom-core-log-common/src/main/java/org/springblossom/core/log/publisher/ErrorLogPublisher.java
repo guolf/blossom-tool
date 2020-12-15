@@ -1,9 +1,11 @@
 package org.springblossom.core.log.publisher;
 
+import org.slf4j.MDC;
 import org.springblossom.core.log.constant.EventConstant;
 import org.springblossom.core.log.event.ErrorLogEvent;
 import org.springblossom.core.log.model.LogError;
 import org.springblossom.core.log.utils.LogAbstractUtil;
+import org.springblossom.core.tool.constant.BlossomConstant;
 import org.springblossom.core.tool.utils.Exceptions;
 import org.springblossom.core.tool.utils.Func;
 import org.springblossom.core.tool.utils.SpringUtil;
@@ -24,6 +26,7 @@ public class ErrorLogPublisher {
 		HttpServletRequest request = WebUtil.getRequest();
 		LogError logError = new LogError();
 		logError.setRequestUri(requestUri);
+		logError.setTraceId(MDC.get(BlossomConstant.LOG_TRACE_ID));
 		if (Func.isNotEmpty(error)) {
 			logError.setStackTrace(Exceptions.getStackTraceAsString(error));
 			logError.setExceptionName(error.getClass().getName());
