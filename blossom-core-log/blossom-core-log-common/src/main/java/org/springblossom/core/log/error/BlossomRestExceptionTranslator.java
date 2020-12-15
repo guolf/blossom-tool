@@ -65,6 +65,11 @@ public class BlossomRestExceptionTranslator {
 		return R.fail(ResultCode.PARAM_TYPE_ERROR, message);
 	}
 
+	/**
+	 * 处理请求参数格式错误 @RequestBody上validate失败后抛出的异常是MethodArgumentNotValidException异常
+	 * @param e
+	 * @return
+	 */
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public R handleError(MethodArgumentNotValidException e) {
@@ -72,6 +77,11 @@ public class BlossomRestExceptionTranslator {
 		return handleError(e.getBindingResult());
 	}
 
+	/**
+	 * 处理Get请求中 使用@Valid 验证路径中请求实体校验失败后抛出的异常
+	 * @param e
+	 * @return
+	 */
 	@ExceptionHandler(BindException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public R handleError(BindException e) {
@@ -86,6 +96,11 @@ public class BlossomRestExceptionTranslator {
 		return R.fail(ResultCode.PARAM_BIND_ERROR, message);
 	}
 
+	/**
+	 * 处理请求参数格式错误 @RequestParam上validate失败后抛出的异常是javax.validation.ConstraintViolationException
+	 * @param e
+	 * @return
+	 */
 	@ExceptionHandler(ConstraintViolationException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public R handleError(ConstraintViolationException e) {
@@ -130,6 +145,7 @@ public class BlossomRestExceptionTranslator {
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public R handleSQLError(DataAccessException e) {
 		log.error("数据库异常", e);
+		ErrorLogPublisher.publishEvent(e, UrlUtil.getPath(WebUtil.getRequest().getRequestURI()));
 		return R.fail(ResultCode.INTERNAL_SERVER_ERROR, "服务器异常，请稍后再试");
 	}
 
