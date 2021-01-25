@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springblossom.core.boot.ctrl.BlossomController;
 import org.springblossom.core.file.entity.FileInfoEntity;
+import org.springblossom.core.file.exception.FileNotFoundException;
 import org.springblossom.core.file.model.BlossomFile;
 import org.springblossom.core.file.service.FileInfoService;
 import org.springblossom.core.file.service.FileService;
@@ -108,7 +109,7 @@ public class FileController extends BlossomController {
 	public void downLoad(@ApiParam("文件的ID或MD5") @PathVariable("id") String idOrMd5, @ApiParam(value = "文件名，如果未指定，默认未上传时的文件名", required = false) @RequestParam(value = "name", required = false) String name, @ApiParam(hidden = true) HttpServletResponse response, @ApiParam(hidden = true) HttpServletRequest request) throws IOException {
 		FileInfoEntity fileInfo = fileInfoService.selectByIdOrMd5(idOrMd5);
 		if (fileInfo == null) {
-			throw new BlossomBaseException("文件不存在");
+			throw new FileNotFoundException("文件不存在");
 		}
 		String fileName = fileInfo.getName();
 		String suffix = fileName.contains(".") ? fileName.substring(fileName.lastIndexOf("."), fileName.length()) : "";
