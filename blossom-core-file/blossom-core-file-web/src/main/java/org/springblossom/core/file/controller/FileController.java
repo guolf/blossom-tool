@@ -10,8 +10,8 @@ import org.springblossom.core.file.entity.FileInfoEntity;
 import org.springblossom.core.file.model.BlossomFile;
 import org.springblossom.core.file.service.FileInfoService;
 import org.springblossom.core.file.service.FileService;
-import org.springblossom.core.log.exception.ServiceException;
 import org.springblossom.core.tool.api.R;
+import org.springblossom.core.tool.exception.BlossomBaseException;
 import org.springblossom.core.tool.utils.Func;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
@@ -83,7 +83,7 @@ public class FileController extends BlossomController {
 		try {
 			fileInfo = fileService.saveFile(file.getInputStream(), fileName, file.getContentType());
 		} catch (IOException e) {
-			throw new ServiceException("save file error");
+			throw new BlossomBaseException("save file error");
 		}
 		return R.data(fileInfo);
 	}
@@ -108,7 +108,7 @@ public class FileController extends BlossomController {
 	public void downLoad(@ApiParam("文件的ID或MD5") @PathVariable("id") String idOrMd5, @ApiParam(value = "文件名，如果未指定，默认未上传时的文件名", required = false) @RequestParam(value = "name", required = false) String name, @ApiParam(hidden = true) HttpServletResponse response, @ApiParam(hidden = true) HttpServletRequest request) throws IOException {
 		FileInfoEntity fileInfo = fileInfoService.selectByIdOrMd5(idOrMd5);
 		if (fileInfo == null) {
-			throw new ServiceException("文件不存在");
+			throw new BlossomBaseException("文件不存在");
 		}
 		String fileName = fileInfo.getName();
 		String suffix = fileName.contains(".") ? fileName.substring(fileName.lastIndexOf("."), fileName.length()) : "";
